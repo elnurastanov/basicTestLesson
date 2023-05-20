@@ -109,7 +109,7 @@ describe("testStatement function", () => {
   });
 });
 
-describe.only("merge function", () => {
+describe("merge function", () => {
   it("should elements be null", () => {
     expect(() => merge(null, null)).toThrow("Cant merge nullable value!");
   });
