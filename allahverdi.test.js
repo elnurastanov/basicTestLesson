@@ -109,7 +109,7 @@ describe("testStatement function", () => {
   });
 });
 
-describe.only("merge function", () => {
+describe("merge function", () => {
   it("should elements be null", () => {
     expect(() => merge(null, null)).toThrow("Cant merge nullable value!");
   });
@@ -119,6 +119,10 @@ describe.only("merge function", () => {
       "Arguments must be object or array!"
     );
   });
+
+  // it("should arguments be the same types", () => {
+  //   expect(() => merge(15, 9)).toThrow("Arguments must be same type!");
+  // });
 
   it("should the first argument be array", () => {
     expect(merge([1, 3, 5], { a: 1 })).toStrictEqual([1, 3, 5, { a: 1 }]);
