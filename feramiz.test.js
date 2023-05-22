@@ -89,6 +89,11 @@ describe("getLocalCurrency function", () => {
   it("should return local currency", () => {
     expect(getLocalCurrency("AZ")).toEqual("AZN");
   });
+  it("should return undefined for non-existent country codes", () => {
+    expect(getLocalCurrency("RU")).toBeUndefined();
+    expect(getLocalCurrency("FR")).toBeUndefined();
+    expect(getLocalCurrency("JP")).toBeUndefined();
+  });
 });
 
 describe("testStatement function", () => {
