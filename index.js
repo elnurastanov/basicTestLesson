@@ -42,7 +42,6 @@ function isPrime(value) {
       return false;
     }
   }
-
   return true;
 }
 
@@ -81,7 +80,6 @@ function removeLastChar(value) {
   if (typeof value !== "string") {
     throw new Error("Typeof argument must be string!");
   }
-
   return value.slice(0, -1);
 }
 
