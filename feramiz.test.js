@@ -22,7 +22,7 @@ describe("isPrime function", () => {
   it("should result be prime number", () => {
     expect(isPrime(8)).toBeFalsy();
   });
-  it("should result be prime number", () => {
+  it("should result be falsy case", () => {
     expect(isPrime(0.5)).toBeFalsy();
   });
 
