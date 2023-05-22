@@ -1,7 +1,5 @@
 const { sum, isNull, addProperty, isEven, isPrime, reverseArray, removeLastChar, testStatement, getLocalCurrency, merge } = require("./index")
 
-// sum 
-
 describe("sum function", () => {
 
     it("this function should solve the sum of two numbers", () => {
@@ -13,7 +11,6 @@ describe("sum function", () => {
     })
 })
 
-// isNull
 
 describe("isNull function", () => {
 
@@ -26,7 +23,6 @@ describe("isNull function", () => {
 
 })
 
-// addProperty
 
 describe("addProperty function", () => {
     let dummyObject;
@@ -39,7 +35,6 @@ describe("addProperty function", () => {
     })
 })
 
-// isEven
 
 describe("isEven function", () => {
 
@@ -57,7 +52,6 @@ describe("isEven function", () => {
 })
 
 
-// isPrime 
 describe("isPrime", () => {
 
     it("this function must return true", () => {
@@ -77,7 +71,6 @@ describe("isPrime", () => {
 })
 
 
-// reverseArray
 
 describe("reverseArray function", () => {
 
@@ -92,7 +85,6 @@ describe("reverseArray function", () => {
     })
 })
 
-// merge 
 
 describe("merge function", () => {
 
@@ -108,7 +100,6 @@ describe("merge function", () => {
 
 })
 
-// removeLastChar
 
 describe("removeLastChar", () => {
 
@@ -121,7 +112,6 @@ describe("removeLastChar", () => {
 })
 
 
-// testStatement
 
 describe("testStatement function", () => {
 
@@ -137,7 +127,6 @@ describe("testStatement function", () => {
 
 })
 
-// getLocalCurrency
 
 describe("getLocalCurrency function", () => {
 
