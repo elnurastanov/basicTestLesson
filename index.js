@@ -12,7 +12,7 @@ function isNull(value) {
 
 function addProperty(valueObject, newProperty) {
   if (valueObject[newProperty]) {
-    throw new Error("Couldn't add duplicated property!");
+    throw new Error("Couldn't add dublicated property!");
   }
 
   valueObject[newProperty] = null;
