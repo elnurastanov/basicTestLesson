@@ -12,7 +12,7 @@ function isNull(value) {
 
 function addProperty(valueObject, newProperty) {
   if (valueObject[newProperty]) {
-    throw new Error("Couldn't add dublicated property!");
+    throw new Error("Couldn't add duplicated property!");
   }
 
   valueObject[newProperty] = null;
@@ -114,4 +114,4 @@ module.exports = {
   removeLastChar,
   testStatement,
   getLocalCurrency,
-};
+}

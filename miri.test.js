@@ -11,7 +11,6 @@ const { sum,
 } = require('./index');
 
 
-// sum
 describe('sum and arguments check number', () => {
     it('check a+b', () => {
         expect(sum(1, 3)).toBe(4)
@@ -21,7 +20,7 @@ describe('sum and arguments check number', () => {
     })
 });
 
-//isNull
+
 describe("isNull function", () => {
     it("checks arguments null", () => {
         expect(isNull(null)).toBeTruthy();
@@ -31,7 +30,7 @@ describe("isNull function", () => {
     })
 });
 
-//addProperty
+
 
 describe('addProperty function', () => {
     it("should property is not null", () => {
@@ -44,7 +43,7 @@ describe('addProperty function', () => {
     })
 });
 
-//isEven
+
 
 describe('isEven function', () => {
     it("check argument typeof number", () => {
@@ -58,7 +57,7 @@ describe('isEven function', () => {
     })
 });
 
-//isPrime
+
 describe('isPrime function', () => {
     it("check argument typeof number", () => {
         expect(() => isPrime("1999")).toThrow("Typeof passed value is not number!")
@@ -74,7 +73,6 @@ describe('isPrime function', () => {
     })
 });
 
-//reverseArray
 describe('reverseArray function', () => {
     it("reverse array", () => {
         expect(reverseArray([1, 2, 3, 4])).toEqual([4, 3, 2, 1])
@@ -84,7 +82,7 @@ describe('reverseArray function', () => {
     })
 });
 
-//merge
+
 describe('merge function', () => {
     it("check argument is null", () => {
         expect(() => merge(null, 5)).toThrow("Cant merge nullable value!")
@@ -92,10 +90,6 @@ describe('merge function', () => {
     it("check argument is object", () => {
         expect(() => merge(5, [1, 2, 3])).toThrow("Arguments must be object or array!")
     })
-    //index.js faylında commentimə baxın zəhmət olmasa
-    // it("check arguments are same type", () => {
-    //     expect(() => merge(5, [1, 2, 3])).toThrow("Arguments must be same type!")
-    // })
 
     it("check argument is array", () => {
         expect(merge([1, 2, 3], { a: 1999 })).toEqual([1, 2, 3, { a: 1999 }])
@@ -110,7 +104,6 @@ describe('merge function', () => {
     })
 });
 
-//removeLastChar
 describe('removeLastChar function', () => {
     it("check argument is not string", () => {
         expect(() => removeLastChar(1999)).toThrow("Typeof argument must be string!")
@@ -120,7 +113,6 @@ describe('removeLastChar function', () => {
     })
 });
 
-//testStatement
 describe('testStatement function', () => {
     it("check first arg is not boolean", () => {
         expect(() => testStatement(1999)).toThrow("Type of first argument must be boolean!")
@@ -133,7 +125,6 @@ describe('testStatement function', () => {
     })
 });
 
-//getLocalCurrency
 describe('getLocalCurrency function', () => {
     it("getLocalCurrency", () => {
         expect(getLocalCurrency("AZ")).toEqual("AZN")
