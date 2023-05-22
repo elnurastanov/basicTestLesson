@@ -63,9 +63,9 @@ function merge(element1, element2) {
     throw new Error("Arguments must be object or array!");
   }
 
-//   if (element1Type !== element2Type) {
-//     throw new Error("Arguments must be same type!");
-//   }
+  if (element1Type !== element2Type) {
+    throw new Error("Arguments must be same type!");
+  }
 
   if (Array.isArray(element1)) {
     return [...element1, element2];
