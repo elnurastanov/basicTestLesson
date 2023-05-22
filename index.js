@@ -2,12 +2,14 @@ function sum(a, b) {
   if (typeof a !== "number" || typeof b !== "number") {
     throw new Error("Typeof parameters must be number type");
   }
+
   return a + b;
 }
 
 function isNull(value) {
   return value === null;
 }
+
 function addProperty(valueObject, newProperty) {
   if (valueObject[newProperty]) {
     throw new Error("Couldn't add dublicated property!");
@@ -30,16 +32,20 @@ function isPrime(value) {
   if (typeof value !== "number") {
     throw new Error("Typeof passed value is not number!");
   }
+
   if (value <= 1) {
     return false;
   }
+
   for (let i = 2; i <= Math.sqrt(value); i++) {
     if (value % i === 0) {
       return false;
     }
   }
+
   return true;
 }
+
 function reverseArray(array) {
   array.reverse();
   return array;
@@ -55,6 +61,10 @@ function merge(element1, element2) {
 
   if (element1Type !== "object" || element2Type !== "object") {
     throw new Error("Arguments must be object or array!");
+  }
+
+  if (element1Type !== element2Type) {
+    throw new Error("Arguments must be same type!");
   }
 
   if (Array.isArray(element1)) {
@@ -74,6 +84,7 @@ function removeLastChar(value) {
 
   return value.slice(0, -1);
 }
+
 function testStatement(statement, truthyValue, falsyValue) {
   if (typeof statement !== "boolean") {
     throw new Error("Type of first argument must be boolean!");
@@ -81,6 +92,7 @@ function testStatement(statement, truthyValue, falsyValue) {
 
   return statement ? truthyValue : falsyValue;
 }
+
 function getLocalCurrency(countryCode) {
   return {
     AZ: "AZN",
@@ -90,6 +102,7 @@ function getLocalCurrency(countryCode) {
     GE: "EU",
   }[countryCode];
 }
+
 module.exports = {
   sum,
   isNull,
@@ -97,8 +110,8 @@ module.exports = {
   isEven,
   isPrime,
   reverseArray,
+  merge,
   removeLastChar,
   testStatement,
   getLocalCurrency,
-  merge,
 };
