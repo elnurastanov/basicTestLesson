@@ -122,4 +122,8 @@ describe('getLocationCurreny function', () => {
   it('should return currency of country code', () => {
     expect(getLocalCurrency('AZ')).toBe('AZN')
   })
+
+  it('should return undefined for non-available country codes', () => {
+    expect(getLocalCurrency('FR')).toBeUndefined()
+  })
 })
