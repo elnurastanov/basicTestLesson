@@ -1,3 +1,8 @@
+const {
+    fetchComment,
+    fetchAndStore,
+    getCommentFromStore,
+} = require("./comment");
 const { sum, isNull, addProperty } = require("./index");
 
 describe("sum function", () => {
@@ -32,5 +37,51 @@ describe("addProperty function", () => {
         expect(() => addProperty(dummyObj, "a")).toThrow(
             "Couldn't add dublicated property!"
         );
+    });
+});
+
+describe.only("Fetch comment functionality", () => {
+    const defaultId = 1;
+    const notFoundId = -1;
+    const expectedResult = {
+        id: 1,
+        body: "This is some awesome thinking!",
+        postId: 100,
+        user: {
+            id: 63,
+            username: "eburras1q",
+        },
+    };
+    const expectedNotFoundResult = {
+        message: "Comment with id '-1' not found",
+    };
+
+    it("should fetch result of id 1 be same with expected result (Promise)", () => {
+        return fetchComment(defaultId).then((data) => {
+            expect(data).toEqual(expectedResult);
+        });
+    });
+
+    it("should fetch result of id 1 be same with expected result (Async/Await)", async() => {
+        const data = await fetchComment(defaultId);
+
+        expect(data).toEqual(expectedResult);
+    });
+
+    it("should fetch result of id 1 be same with expected result (Async/Promise)", async() => {
+        await expect(fetchComment(defaultId)).resolves.toEqual(expectedResult);
+    });
+
+    it("should not found result be same with expected not found result", () => {
+        return fetchComment(notFoundId).then((data) => {
+            expect(data).toEqual(expectedNotFoundResult);
+        });
+    });
+
+    it("should be fetched comment will be stored in storage", async() => {
+        await fetchAndStore(2);
+        const data = getCommentFromStore(2);
+
+        expect(data).toEqual(expectedResult);
     });
 });
