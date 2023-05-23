@@ -78,7 +78,7 @@ describe("isPrime function", () => {
 });
 
 describe("reverseArray function", () => {
-  it("should be reserved array", () => {
+  it("should be reserved array ", () => {
     expect(reverseArray([1, 2, 5, 7])).toEqual([7, 5, 2, 1]);
   });
 });
