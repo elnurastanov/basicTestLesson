@@ -10,7 +10,6 @@ const { sum,
     getLocalCurrency
 } = require('./index');
 
-
 describe('sum and arguments check number', () => {
     it('check a+b', () => {
         expect(sum(1, 3)).toBe(4)
@@ -20,7 +19,6 @@ describe('sum and arguments check number', () => {
     })
 });
 
-
 describe("isNull function", () => {
     it("checks arguments null", () => {
         expect(isNull(null)).toBeTruthy();
@@ -29,8 +27,6 @@ describe("isNull function", () => {
         expect(isNull(1)).toBeFalsy();
     })
 });
-
-
 
 describe('addProperty function', () => {
     it("should property is not null", () => {
@@ -43,8 +39,6 @@ describe('addProperty function', () => {
     })
 });
 
-
-
 describe('isEven function', () => {
     it("check argument typeof number", () => {
         expect(() => isEven("1999")).toThrow("Typeof passed value is not number!")
@@ -56,7 +50,6 @@ describe('isEven function', () => {
         expect(isEven(7)).toBeFalsy()
     })
 });
-
 
 describe('isPrime function', () => {
     it("check argument typeof number", () => {
@@ -81,7 +74,6 @@ describe('reverseArray function', () => {
         expect(() => reverseArray('string')).toThrow("array.reverse is not a function")
     })
 });
-
 
 describe('merge function', () => {
     it("check argument is null", () => {
