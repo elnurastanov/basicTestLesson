@@ -114,4 +114,4 @@ module.exports = {
   removeLastChar,
   testStatement,
   getLocalCurrency,
-}
+};
