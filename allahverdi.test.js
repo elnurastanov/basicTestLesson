@@ -120,10 +120,6 @@ describe("merge function", () => {
     );
   });
 
-  // it("should arguments be the same types", () => {
-  //   expect(() => merge(15, 9)).toThrow("Arguments must be same type!");
-  // });
-
   it("should the first argument be array", () => {
     expect(merge([1, 3, 5], { a: 1 })).toStrictEqual([1, 3, 5, { a: 1 }]);
   });
