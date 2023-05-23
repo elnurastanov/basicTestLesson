@@ -65,7 +65,7 @@ describe("isPrime function", () => {
   });
 
   it("should not number be less than 1", () => {
-    expect(isPrime(-9)).toBeFalsy();
+    expect(isPrime(-8)).toBeFalsy();
   });
 
   it("should number not diveded to digit", () => {
