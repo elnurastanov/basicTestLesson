@@ -125,4 +125,8 @@ describe("getLocalCurrency function", () => {
     expect(getLocalCurrency("PL")).toBe("ZL");
     expect(getLocalCurrency("GE")).toBe("EU");
   });
+
+  it("should not found currency for country code", () => {
+    expect(getLocalCurrency("EN")).toBeUndefined();
+  });
 });
