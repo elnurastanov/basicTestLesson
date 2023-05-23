@@ -31,7 +31,7 @@ describe("isNull function", () => {
 describe('addProperty function', () => {
     it("should property is not null", () => {
         const mockObj = { a: 'salam' };
-        expect(() => addProperty(mockObj, 'a')).toThrow("Couldn't add duplicated property!")
+        expect(() => addProperty(mockObj, 'a')).toThrow("Couldn't add dublicated property!")
     })
     it("should property is null", () => {
         const mockObj = { a: 'salam', b: null };
