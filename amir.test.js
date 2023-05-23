@@ -137,6 +137,7 @@ describe.only("Testing of CRUD operations(dummyjson)", ()=>{
   let ISOTime = d.toISOString()
 
   const defaultId = 1
+  const notFoundId = -1
 
   const newComment = {
     body:"Learn JEST as advanced",
@@ -180,9 +181,22 @@ describe.only("Testing of CRUD operations(dummyjson)", ()=>{
     "deletedOn": ISOTime
   }
 
+  const expectedNotFoundResult = {
+    "message": "Comment with id '-1' not found"
+  }
+
+  const expectedInvalidBodyResult = {
+      "message": "Invalid comment body"
+  }
+
   it("should add a new comment",async()=>{
     const newData = await addComment(newComment)
     expect(newData).toEqual(expectedResult)
+  })
+
+  it('should return nothing if provided object is empty',async()=>{
+    const newData = await addComment({})
+    expect(newData).toEqual(expectedInvalidBodyResult)
   })
 
   it('should update the comment',async()=>{
@@ -190,9 +204,19 @@ describe.only("Testing of CRUD operations(dummyjson)", ()=>{
     expect(updatedData).toEqual(expectedUpdatedResult)
   })
 
+  it('should not update comment for invalid id',async()=>{
+    const updatedData = await updateComment(notFoundId,updatedBody)
+    expect(updatedData).toEqual(expectedNotFoundResult)
+  })
+
   it('should delete the comment',async()=>{
     const deletedData = await deleteComment(defaultId)
     deletedData['deletedOn'] = ISOTime
     expect(deletedData).toEqual(expectedDeletedResult)
+  })
+
+  it('should not delete if provided id is incorrect',async()=>{
+    const deletedData = await deleteComment(notFoundId)
+    expect(deletedData).toEqual(expectedNotFoundResult)
   })
 })
