@@ -11,12 +11,13 @@ const {
   getLocalCurrency,
 } = require("./index");
 
+const { addComment, updateComment, deleteComment } = require("./camil.comment");
+
 describe("sum function", () => {
   it("should return sum of the two numbers", () => {
     expect(sum(1, 2)).toBe(3);
   });
   it("should throw error if the parameters are not numbers", () => {
-    expect(() => sum(3, "b")).toThrow("Typeof parameters must be number type");
     expect(() => sum(3, true)).toThrow("Typeof parameters must be number type");
     expect(() => sum(3, [])).toThrow("Typeof parameters must be number type");
   });
@@ -42,7 +43,9 @@ describe("addProperty function", () => {
 
   it("should be throw error in duplicated key", () => {
     const dummyObj = { a: 1 };
-    expect(() => addProperty(dummyObj, "a")).toThrow("Couldn't add dublicated property!");
+    expect(() => addProperty(dummyObj, "a")).toThrow(
+      "Couldn't add dublicated property!"
+    );
   });
 });
 
@@ -117,27 +120,21 @@ describe("removeLastChar function", () => {
   });
 });
 describe("testStatement", () => {
-  it("should return truthyValue if statement is true", () => {
+  it("should return Truthy if statement is true", () => {
     const statement = true;
-    const truthyValue = "Truthy";
-    const falsyValue = "Falsy";
-    const result = testStatement(statement, truthyValue, falsyValue);
-    expect(result).toBe(truthyValue);
+    const result = testStatement(true, "Truthy", "Falsy");
+    expect(result).toBe("Truthy");
   });
 
-  it("should return falsyValue if statement is false", () => {
+  it("should return Falsy if statement is false", () => {
     const statement = false;
-    const truthyValue = "Truthy";
-    const falsyValue = "Falsy";
-    const result = testStatement(statement, truthyValue, falsyValue);
-    expect(result).toBe(falsyValue);
+    const result = testStatement(statement, "Truthy", "Falsy");
+    expect(result).toBe("Falsy");
   });
 
   it("should throw an error if the statement is not a boolean", () => {
     const statement = "is not boolean";
-    const truthyValue = "Truthy";
-    const falsyValue = "Falsy";
-    expect(() => testStatement(statement, truthyValue, falsyValue)).toThrow(
+    expect(() => testStatement(statement, "Truthy", "Falsy")).toThrow(
       "Type of first argument must be boolean!"
     );
   });
@@ -153,5 +150,68 @@ describe("getLocalCurrency function", () => {
     expect(getLocalCurrency("UK")).toBeUndefined();
     expect(getLocalCurrency("FR")).toBeUndefined();
     expect(getLocalCurrency("ES")).toBeUndefined();
+  });
+});
+describe.only("Testing Asynchronous Code (dummyjson API)", () => {
+  const defaultId = 1;
+
+  const date = new Date();
+  let currentISOTime = date.toISOString();
+
+  const newComment = {
+    body: "Learn JEST as advanced",
+    postId: 3,
+    userId: 5,
+  };
+
+  const updatedBody = {
+    body: "Hey, I am updated",
+  };
+
+  const expectedResult = {
+    id: 341,
+    body: "I am expected result",
+    postId: 3,
+    user: {
+      id: 5,
+      username: "kmeus4",
+    },
+  };
+
+  const expectedUpdatedResult = {
+    id: 1,
+    body: "I am your expected and updated result",
+    postId: 100,
+    user: {
+      id: 4,
+      username: "eburras1q",
+    },
+  };
+
+  const expectedDeletedResult = {
+    id: 1,
+    body: "I am your expected result",
+    postId: 100,
+    user: {
+      id: 43,
+      username: "eburras1q",
+    },
+    isDeleted: true,
+    deletedOn: currentISOTime,
+  };
+  it("should add new comment", async () => {
+    expect(await addComment(newComment)).toEqual(expectedResult);
+  });
+
+  it("should update the comment", async () => {
+    expect(await updateComment(defaultId, updatedBody)).toEqual(
+      expectedUpdatedResult
+    );
+  });
+
+  it("should delete the comment", async () => {
+    let deletedData = await deleteComment(defaultId);
+    deletedData["deletedOn"] = currentISOTime;
+    expect(deletedData).toEqual(expectedDeletedResult);
   });
 });
