@@ -3,6 +3,7 @@ const {
   fetchAndStore,
   getCommentFromStore,
 } = require("./comment");
+
 const { sum, isNull, addProperty } = require("./index");
 
 describe("sum function", () => {
