@@ -1,12 +1,12 @@
 const store = new Map();
 const id = 1;
 
-function addComment() {
+function addComment(body) {
     return fetch('https://dummyjson.com/comments/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            body: 'This makes all sense to me!',
+            body: `${body}`,
             postId: 3,
             userId: 5,
         })
@@ -19,8 +19,8 @@ function addComment() {
 }
 
 
-function updateComment() {
-    return fetch('https://dummyjson.com/comments/1', {
+function updateComment(id) {
+    return fetch(`https://dummyjson.com/comments/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -29,13 +29,13 @@ function updateComment() {
       })
       .then(res => res.json())
       .then((data) => {
-        store.set(341 ,data);
+        store.set(id ,data);
         return data
-      });
+    });
 }
 
-function deleteComment() {
-    return fetch('https://dummyjson.com/comments/1', {
+function deleteComment(id) {
+    return fetch(`https://dummyjson.com/comments/${id}`, {
       method: 'DELETE',
     })
     .then(res => res.json())
