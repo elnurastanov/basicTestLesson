@@ -10,6 +10,7 @@ const {
   testStatement,
   getLocalCurrency,
 } = require("./index");
+const {addComment, updateComment,deleteComment} = require('./amir.comment')
 
 describe("sum function", () => {
   it("should result be 3 of 1 and 2", () => {
@@ -130,3 +131,92 @@ describe("getLocalCurrency function", () => {
     expect(getLocalCurrency("EN")).toBeUndefined();
   });
 });
+
+describe.only("Testing of CRUD operations(dummyjson)", ()=>{
+  const d = new Date()
+  let ISOTime = d.toISOString()
+
+  const defaultId = 1
+  const notFoundId = -1
+
+  const newComment = {
+    body:"Learn JEST as advanced",
+    postId:3,
+    userId:5
+  }
+
+  const updatedBody = {
+    body:"Be carefull with mocking"
+  }
+
+  const expectedResult = {
+    "id": 341,
+    "body": "Learn JEST as advanced",
+    "postId": 3,
+    "user": {
+      "id": 5,
+      "username": "kmeus4"
+    }
+  }
+
+  const expectedUpdatedResult = {
+    "id": 1,
+    "body": "Be carefull with mocking",
+    "postId": 100,
+    "user": {
+      "id": 63,
+      "username": "eburras1q"
+    }
+  }
+
+  const expectedDeletedResult = {
+    "id": 1,
+    "body": "This is some awesome thinking!",
+    "postId": 100,
+    "user": {
+      "id": 63,
+      "username": "eburras1q"
+    },
+    "isDeleted": true,
+    "deletedOn": ISOTime
+  }
+
+  const expectedNotFoundResult = {
+    "message": "Comment with id '-1' not found"
+  }
+
+  const expectedInvalidBodyResult = {
+      "message": "Invalid comment body"
+  }
+
+  it("should add a new comment",async()=>{
+    const newData = await addComment(newComment)
+    expect(newData).toEqual(expectedResult)
+  })
+
+  it('should return nothing if provided object is empty',async()=>{
+    const newData = await addComment({})
+    expect(newData).toEqual(expectedInvalidBodyResult)
+  })
+
+  it('should update the comment',async()=>{
+    const updatedData = await updateComment(defaultId,updatedBody);
+    expect(updatedData).toEqual(expectedUpdatedResult)
+  })
+
+  it('should not update comment for invalid id',async()=>{
+    const updatedData = await updateComment(notFoundId,updatedBody)
+    expect(updatedData).toEqual(expectedNotFoundResult)
+  })
+
+  it('should delete the comment',async()=>{
+    const deletedData = await deleteComment(defaultId)
+    deletedData['deletedOn'] = ISOTime
+    expect(deletedData).toEqual(expectedDeletedResult)
+  })
+
+  it('should not delete if provided id is incorrect',async()=>{
+    const deletedData = await deleteComment(notFoundId)
+    expect(deletedData).toEqual(expectedNotFoundResult)
+  })
+})
