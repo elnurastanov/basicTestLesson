@@ -10,6 +10,13 @@ const {
   getCommentFromStore,
 } = require('./tural.comment')
 
+const {
+  arrayReducer,
+  sum,
+  multiply,
+  Comments
+} = require('./tural.mock')
+
 describe("Fetch comment functionality", () => {
   const defaultId = 1;
   const notFoundId = -1;
@@ -55,8 +62,6 @@ describe("Fetch comment functionality", () => {
   });
 });
 
-
-//create test
 describe("Create comment functionality", () => {
 
   const defaultData = {
@@ -109,7 +114,6 @@ describe("Create comment functionality", () => {
   });
 });
 
-//update test
 describe("Update comment functionality", () => {
 
   const defaultData = {
@@ -160,7 +164,6 @@ describe("Update comment functionality", () => {
   });
 });
 
-//delete test
 describe("Delete comment functionality", () => {
 
   const expectedResult = {
@@ -209,3 +212,45 @@ describe("Delete comment functionality", () => {
     });
   });
 });
+
+describe('mock arrayReducer fuctionality test', () => {
+  const mockCallback = jest.fn(sum);
+
+  test('arrayReducer mock function', () => {
+    arrayReducer([0, 1], mockCallback);
+
+    // The mock function was called twice
+    expect(mockCallback.mock.calls).toHaveLength(2);
+
+    // The second argument of the first call to the function was 0
+    expect(mockCallback.mock.calls[0][1]).toBe(0);
+
+    // The second argument of the second call to the function was 1
+    expect(mockCallback.mock.calls[1][1]).toBe(1);
+
+    // The return value of the first call to the function was 42
+    expect(mockCallback.mock.results[0].value).toBe(0);
+  });
+})
+
+const axios = require('axios');
+jest.mock('axios');
+
+describe.only('when mock fetch functionality', () => {
+  
+  it('should return comments', async () => {
+    const comment = [{
+      "id": 341,
+      "body": "This makes all sense to me!",
+      "postId": 3,
+      "user": {
+        "id": 5,
+        "username": "kmeus4"
+      }
+    }];
+    const resp = { data: comment };
+    axios.get.mockResolvedValue(resp);
+
+    return Comments().then(data => expect(data).toEqual(comment));
+  });
+})
