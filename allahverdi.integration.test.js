@@ -1,89 +1,122 @@
-const {addComment, updateComment, deleteComment} = require("./allahverdi.integration");
+const {
+  addComment,
+  updateComment,
+  deleteComment,
+} = require("./allahverdi.integration");
 
-describe.only('addComment', () => {
+afterEach(() => {
+  return global.fetch.mockClear();
+});
 
-    const expectedAddResult = {
-        "id": 341,
-        "body": "This makes all sense to me!",
-        "postId": 3,
-        "user": {
-          "id": 5,
-          "username": "kmeus4"
-        }
-    }
-    const expectedNotFoundAddResult = {
-        "message": "Invalid comment body"
-    }
+describe.only("addComment", () => {
+  const expectedAddResult = {
+    id: 341,
+    body: "This makes all sense to me!",
+    postId: 3,
+    user: {
+      id: 5,
+      username: "kmeus4",
+    },
+  };
+  const expectedNotFoundAddResult = {
+    message: "Invalid comment body",
+  };
 
-    const expectedUpdateResult = {
-        "id": 1,
-        "body": "Updated Datas",
-        "postId": 100,
-        "user": {
-          "id": 63,
-          "username": "eburras1q"
-        }
-    }
+  const expectedUpdateResult = {
+    id: 1,
+    body: "Updated Datas",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+  };
+  const expectedNotFoundUpdateResult = {
+    message: "Comment with id '-2' not found",
+  };
 
-    const expectedNotFoundUpdateResult = {
-        "message": "Comment with id '-2' not found"
-    }
+  let dataTime = new Date().toISOString();
+  const expectedDeleteResult = {
+    id: 1,
+    body: "This is some awesome thinking!",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+    isDeleted: true,
+    deletedOn: dataTime,
+  };
+  const expectedNotDeleteResult = {
+    message: "Comment with id '-2' not found",
+  };
 
+  it("should add comment", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedAddResult),
+      })
+    );
 
-    let dataTime = new Date().toISOString();
-    const expectedDeleteResult = {
-        "id": 1,
-        "body": "This is some awesome thinking!",
-        "postId": 100,
-        "user": {
-            "id": 63,
-            "username": "eburras1q"
-        },
-        "isDeleted": true,
-        "deletedOn": dataTime,
-    }
+    return addComment("This makes all sense to me!").then((data) => {
+      expect(data).toEqual(expectedAddResult);
+    });
+  });
 
-    const expectedNotDeleteResult = {
-        "message": "Comment with id '-2' not found"
-    }
+  it("should not add body", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedNotFoundAddResult),
+      })
+    );
 
+    return addComment("").then((data) => {
+      expect(data).toEqual(expectedNotFoundAddResult);
+    });
+  });
 
-    it("should not add body", () =>{
-        return addComment('').then((data) => {
-            expect(data).toEqual(expectedNotFoundAddResult)
-        })
-    })
-       
-    it("should add comment", () => {
-        return addComment("This makes all sense to me!").then((data) => {
-            expect(data).toEqual(expectedAddResult)
-        })
-    })
+  it("should update comment", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedUpdateResult),
+      })
+    );
+    return updateComment(1).then((data) => {
+      expect(data).toEqual(expectedUpdateResult);
+    });
+  });
 
-    it("should update comment", () => {
-        return updateComment(1).then((data) => {
-            expect(data).toEqual(expectedUpdateResult)
-        })
-    })
+  it("should not update comment", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedNotFoundUpdateResult),
+      })
+    );
+    return updateComment(-2).then((data) => {
+      expect(data).toEqual(expectedNotFoundUpdateResult);
+    });
+  });
 
-    it("should not update comment", () => {
-        return updateComment(-2).then((data) => {
-            expect(data).toEqual(expectedNotFoundUpdateResult)
-        })
-    })
+  it("should delete comment", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedDeleteResult),
+      })
+    );
+    return deleteComment(1).then((data) => {
+      data["deletedOn"] = dataTime;
+      expect(data).toEqual(expectedDeleteResult);
+    });
+  });
 
-    it("should delete comment", () => {
-        return deleteComment(1).then((data) => {
-            data["deletedOn"] = dataTime;
-            expect(data).toEqual(expectedDeleteResult)
-        })
-    })
-
-    it("should not delete comment", () => {
-        return deleteComment(-2).then((data) => {
-            expect(data).toEqual(expectedNotDeleteResult);
-        })
-    })
-
-})
-
+  it("should not delete comment", () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedNotDeleteResult),
+      })
+    );
+    return deleteComment(-2).then((data) => {
+      expect(data).toEqual(expectedNotDeleteResult);
+    });
+  });
+});
