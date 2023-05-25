@@ -1,129 +1,211 @@
 const {
-  sum,
-  isNull,
-  addProperty,
-  isEven,
-  isPrime,
-  reverseArray,
-  merge,
-  removeLastChar,
-  testStatement,
-  getLocalCurrency,
-} = require("./index");
+  fetchComment,
+  fetchAndStore,
+  createComment,
+  createAndStore,
+  updateComment,
+  updateAndStore,
+  deleteComment,
+  deleteAndStore,
+  getCommentFromStore,
+} = require('./tural.comment')
 
-describe("sum function", () => {
-  it("should result in 3 for 1 and 2", () => {
-    expect(sum(1, 2)).toBe(3);
+describe("Fetch comment functionality", () => {
+  const defaultId = 1;
+  const notFoundId = -1;
+  const expectedResult = {
+    id: 1,
+    body: "This is some awesome thinking!",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+  };
+  const expectedNotFoundResult = {
+    message: "Comment with id '-1' not found",
+  };
+
+  it("should fetch result of id 1 be same with expected result (Promise)", () => {
+    return fetchComment(defaultId).then((data) => {
+      expect(data).toEqual(expectedResult);
+    });
   });
 
-  it("should throw error in different argument type", () => {
-    expect(() => sum("1", 2)).toThrow("Typeof parameters must be number type");
-  });
-});
-
-describe("isNull function", () => {
-  it("should be result true", () => {
-    expect(isNull(null)).toBeTruthy();
+  it("should fetch result of id 1 be same with expected result (Async/Await)", async () => {
+    const data = await fetchComment(defaultId);
+    expect(data).toEqual(expectedResult);
   });
 
-  it("should be result false", () => {
-    expect(isNull(9)).toBeFalsy();
-  });
-});
-
-describe("addProperty function", () => {
-  it("should added key's value be null and not throw error", () => {
-    const dummyObj = { a: 1 };
-    expect(addProperty(dummyObj, "b")).toEqual({ a: 1, b: null });
-    expect(() => addProperty(dummyObj, "b")).not.toThrow();
+  it("should fetch result of id 1 be same with expected result (Async/Promise)", async () => {
+    await expect(fetchComment(defaultId)).resolves.toEqual(expectedResult);
   });
 
-  it("should be throw error in duplicated key", () => {
-    const dummyObj = { a: 1 };
-    expect(() => addProperty(dummyObj, "a")).toThrow(
-      "Couldn't add dublicated property!"
-    );
-  });
-});
-
-describe('isEven function', () => {
-  it('should be true', () => {
-    expect(isEven(4)).toBeTruthy()
+  it("should not found result be same with expected not found result", () => {
+    return fetchComment(notFoundId).then((data) => {
+      expect(data).toEqual(expectedNotFoundResult);
+    });
   });
 
-  it('should be false', () => {
-    expect(isEven(3)).toBeFalsy()
-  });
+  it("should be fetched comment will be stored in storage", async () => {
+    await fetchAndStore(defaultId);
+    const data = getCommentFromStore(defaultId);
 
-  it("should throw error for non number values", () => {
-    expect(() => isEven("a")).toThrow("Typeof passed value is not number!");
+    expect(data).toEqual(expectedResult);
   });
 });
 
-describe('isPrime function', () => {
-  it('should be false', () => {
-    expect(isPrime(1)).toBeFalsy()
+
+//create test
+describe("Create comment functionality", () => {
+
+  const defaultData = {
+    body: 'This makes all sense to me!',
+    postId: 3,
+    userId: 5,
+  };
+
+  const expectedResult = {
+    "id": 341,
+    "body": "This makes all sense to me!",
+    "postId": 3,
+    "user": {
+      "id": 5,
+      "username": "kmeus4"
+    }
+  };
+
+  const expectedNotFoundResult = {
+    message: "Comment with id '-1' not found",
+  };
+
+  const expectedInvalidBody = { message: 'Invalid comment body' }
+
+  it("should fetch result of data be same with expected result (Promise)", () => {
+    return createComment(defaultData).then((data) => {
+      expect(data).toEqual(expectedResult);
+    });
   });
 
-  it('should be true', () => {
-    expect(isPrime(2)).toBeTruthy()
+  it("should fetch result of data be same with expected result (Async/Await)", async () => {
+    const data = await createComment(defaultData);
+    expect(data).toEqual(expectedResult);
   });
 
-  it("should throw error for non number values", () => {
-    expect(() => isPrime("a")).toThrow("Typeof passed value is not number!");
+  it("should fetch result of data be same with expected result (Async/Promise)", async () => {
+    await expect(createComment(defaultData)).resolves.toEqual(expectedResult);
+  });
+
+  it("should be created comment will be stored in storage", async () => {
+    await createAndStore(defaultData);
+    const data = getCommentFromStore(defaultData.id);
+    expect(data).toEqual(expectedResult);
+  });
+
+  it("should return invalid comment body for empty body", () => {
+    return createComment({...defaultData, body:''}).then((data) => {
+      expect(data).toEqual(expectedInvalidBody);
+    });
   });
 });
 
-describe('reverseArray function', () => {
-  it('should return reversed array', () => {
-    expect(reverseArray([1, 2, 3])).toEqual([3, 2, 1])
-  })
-})
+//update test
+describe("Update comment functionality", () => {
 
-describe('merge function', () => {
-  it('should return merged object', () => {
-    expect(merge({ a: 1 }, { b: 2, c: 3 })).toEqual({ a: 1, b: 2, c: 3 })
-  })
+  const defaultData = {
+    body: 'I think I should shift to the moon',
+  };
 
-  it('should return merged array', () => {
-    expect(merge([1], [2, 3])).toEqual([1, [2, 3]])
-  })
+  const expectedResult = {
+    "id": 1,
+    "body": "I think I should shift to the moon", // only body was updated
+    "postId": 100,
+    "user": {
+      "id": 63,
+      "username": "eburras1q"
+    }
+  };
 
-  it('should receive object types', () => {
-    expect(() => merge({ a: 1 }, 1)).toThrow("Arguments must be object or array!")
-  })
-})
+  const commentId = 1;
 
-describe('removeLastChar function', () => {
-  it('should remove the last char', () => {
-    expect(removeLastChar('orange')).toBe('orang')
-  })
+  const expectedNotFoundResult = {
+    message: "Comment with id '-1' not found",
+  };
 
-  it('should receive string', () => {
-    expect(() => removeLastChar(1)).toThrow('Typeof argument must be string!')
-  })
-})
-
-describe('test statement function', () => {
-  it('should return true', () => {
-    expect(testStatement((5 < 6), 5, 0)).toBe(5)
+  it("should fetch result of data be same with expected result (Promise)", () => {
+    return updateComment(defaultData, commentId).then((data) => {
+      expect(data).toEqual(expectedResult);
+    });
   });
 
-  it('should return false', () => {
-    expect(testStatement((5 > 6), 5, 0)).toBe(0)
+  it("should fetch result of data be same with expected result (Async/Await)", async () => {
+    const data = await updateComment(defaultData, commentId);
+    expect(data).toEqual(expectedResult);
   });
 
-  it('should be boolean', () => {
-    expect(() => testStatement('test')).toThrow("Type of first argument must be boolean!")
-  })
-})
+  it("should fetch result of data be same with expected result (Async/Promise)", async () => {
+    await expect(updateComment(defaultData, commentId)).resolves.toEqual(expectedResult);
+  });
 
-describe('getLocationCurreny function', () => {
-  it('should return currency of country code', () => {
-    expect(getLocalCurrency('AZ')).toBe('AZN')
-  })
+  it("should be updated comment will be stored in storage", async () => {
+    await updateAndStore(defaultData, commentId);
+    const data = getCommentFromStore(commentId);
+    expect(data).toEqual(expectedResult);
+  });
 
-  it('should return undefined for non-available country codes', () => {
-    expect(getLocalCurrency('FR')).toBeUndefined()
-  })
-})
+  it("should not found result be same with expected not found result", () => {
+    return updateComment(defaultData,-1).then((data) => {
+      expect(data).toEqual(expectedNotFoundResult);
+    });
+  });
+});
+
+//delete test
+describe("Delete comment functionality", () => {
+
+  const expectedResult = {
+    "id": 1,
+    "body": "This is some awesome thinking!",
+    "postId": 100,
+    "user": {
+        "id": 63,
+        "username": "eburras1q"
+    },
+    "isDeleted": true,
+    // "deletedOn": (() => new Date().toISOString())()
+  };
+
+  const commentId = 1;
+
+  const expectedNotFoundResult = {
+    message: "Comment with id '-1' not found",
+  };
+
+  it("should delete response result of with default id be same with expected result (Promise)", () => {
+    return deleteComment(commentId).then((data) => {
+      expect(data).toEqual({...expectedResult,"deletedOn":data.deletedOn});
+    });
+  });
+
+  it("should delete response result of with default id be same with expected result (Async/Await)", async () => {
+    const data = await deleteComment(commentId);
+    expect(data).toEqual({...expectedResult,"deletedOn":data.deletedOn});
+  });
+
+  it("should fetch result of data be same with expected result (Async/Promise)", async () => {
+    let data = await deleteComment(commentId)
+    expect(data).toEqual({...expectedResult,"deletedOn":data.deletedOn})
+  });
+
+  it("should be updated comment will be stored in storage", async () => {
+    await deleteAndStore(commentId);
+    const data = getCommentFromStore(commentId);
+    expect(data).toEqual({...expectedResult,"deletedOn":data.deletedOn});
+  });
+
+  it("should not found result be same with expected not found result", () => {
+    return deleteComment(-1).then((data) => {
+      expect(data).toEqual(expectedNotFoundResult);
+    });
+  });
+});
