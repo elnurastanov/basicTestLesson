@@ -66,7 +66,6 @@ async function deleteAndStore(commentId) {
     const data = await deleteComment(commentId);
     store.set(commentId, data)
 }
-
 module.exports = {
     fetchComment,
     fetchAndStore,
