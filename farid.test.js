@@ -15,6 +15,8 @@ const {
   getCommentFromStore,
 } = require("./farid.comment");
 
+const customReduce = require("./farid.mock");
+
 describe("isEven function", () => {
   it("should throw error in different argument type", () => {
     expect(() => isEven("4")).toThrow("Typeof passed value is not number!");
@@ -285,5 +287,60 @@ describe("Delete comment functionality", () => {
     } catch (e) {
       expect(e.message).toMatch(expectedError);
     }
+  });
+});
+
+describe.only("custom reduce mock function", () => {
+  const arr = [1, 2, 3];
+  const mockSum = jest.fn((acc, cur) => acc + cur);
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should call the callback function the correct number of times", () => {
+    customReduce(arr, mockSum);
+    expect(mockSum.mock.calls).toHaveLength(2);
+  });
+
+  it("should call the callback function the correct number of times", () => {
+    customReduce(arr, mockSum, 3);
+    expect(mockSum.mock.calls).toHaveLength(3);
+  });
+
+  it("should use the first element of the array as the accumulator when initial value is undefined", () => {
+    customReduce(arr, mockSum);
+    expect(mockSum.mock.calls[0][0]).toBe(1);
+  });
+
+  it("should use the initial value as the accumulator when initial value was declared", () => {
+    customReduce(arr, mockSum, 3);
+    expect(mockSum.mock.calls[0][0]).toBe(3);
+  });
+
+  it("should use the second element of the array as the current value when initial value is undefined", () => {
+    customReduce(arr, mockSum);
+    expect(mockSum.mock.calls[0][1]).toBe(2);
+  });
+
+  it("should use the first element of the array as the current value when initial value was declared", () => {
+    customReduce(arr, mockSum, 3);
+    expect(mockSum.mock.calls[0][1]).toBe(1);
+  });
+
+  it("should return value of the first call to the function  3 when initial value was undefined", () => {
+    customReduce(arr, mockSum);
+    expect(mockSum.mock.results[0].value).toBe(3);
+  });
+
+  it("should return value of the first call to the function 4 when initial value was declared (3 + 1)", () => {
+    customReduce(arr, mockSum, 3);
+    expect(mockSum.mock.results[0].value).toBe(4);
+  });
+
+  it("should throw error when array is empty", () => {
+    expect(() => customReduce([], mockSum)).toThrow(
+      "Cannot reduce of empty array!"
+    );
   });
 });
