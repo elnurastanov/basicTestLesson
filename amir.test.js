@@ -10,7 +10,8 @@ const {
   testStatement,
   getLocalCurrency,
 } = require("./index");
-const {addComment, updateComment,deleteComment} = require('./amir.comment')
+const { addComment, updateComment, deleteComment } = require("./amir.comment");
+const { customReduce } = require("./amir.mocking");
 
 describe("sum function", () => {
   it("should result be 3 of 1 and 2", () => {
@@ -132,91 +133,231 @@ describe("getLocalCurrency function", () => {
   });
 });
 
-describe.only("Testing of CRUD operations(dummyjson)", ()=>{
-  const d = new Date()
-  let ISOTime = d.toISOString()
+describe("Testing of CRUD operations(dummyjson)", () => {
+  const d = new Date();
+  let ISOTime = d.toISOString();
 
-  const defaultId = 1
-  const notFoundId = -1
+  const defaultId = 1;
+  const notFoundId = -1;
 
   const newComment = {
-    body:"Learn JEST as advanced",
-    postId:3,
-    userId:5
-  }
+    body: "Learn JEST as advanced",
+    postId: 3,
+    userId: 5,
+  };
 
   const updatedBody = {
-    body:"Be carefull with mocking"
-  }
+    body: "Be carefull with mocking",
+  };
 
   const expectedResult = {
-    "id": 341,
-    "body": "Learn JEST as advanced",
-    "postId": 3,
-    "user": {
-      "id": 5,
-      "username": "kmeus4"
-    }
-  }
+    id: 341,
+    body: "Learn JEST as advanced",
+    postId: 3,
+    user: {
+      id: 5,
+      username: "kmeus4",
+    },
+  };
 
   const expectedUpdatedResult = {
-    "id": 1,
-    "body": "Be carefull with mocking",
-    "postId": 100,
-    "user": {
-      "id": 63,
-      "username": "eburras1q"
-    }
-  }
+    id: 1,
+    body: "Be carefull with mocking",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+  };
 
   const expectedDeletedResult = {
-    "id": 1,
-    "body": "This is some awesome thinking!",
-    "postId": 100,
-    "user": {
-      "id": 63,
-      "username": "eburras1q"
+    id: 1,
+    body: "This is some awesome thinking!",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
     },
-    "isDeleted": true,
-    "deletedOn": ISOTime
-  }
+    isDeleted: true,
+    deletedOn: ISOTime,
+  };
 
   const expectedNotFoundResult = {
-    "message": "Comment with id '-1' not found"
-  }
+    message: "Comment with id '-1' not found",
+  };
 
   const expectedInvalidBodyResult = {
-      "message": "Invalid comment body"
-  }
+    message: "Invalid comment body",
+  };
 
-  it("should add a new comment",async()=>{
-    const newData = await addComment(newComment)
-    expect(newData).toEqual(expectedResult)
-  })
+  it("should add a new comment", async () => {
+    const newData = await addComment(newComment);
+    expect(newData).toEqual(expectedResult);
+  });
 
-  it('should return nothing if provided object is empty',async()=>{
-    const newData = await addComment({})
-    expect(newData).toEqual(expectedInvalidBodyResult)
-  })
+  it("should return nothing if provided object is empty", async () => {
+    const newData = await addComment({});
+    expect(newData).toEqual(expectedInvalidBodyResult);
+  });
 
-  it('should update the comment',async()=>{
-    const updatedData = await updateComment(defaultId,updatedBody);
-    expect(updatedData).toEqual(expectedUpdatedResult)
-  })
+  it("should update the comment", async () => {
+    const updatedData = await updateComment(defaultId, updatedBody);
+    expect(updatedData).toEqual(expectedUpdatedResult);
+  });
 
-  it('should not update comment for invalid id',async()=>{
-    const updatedData = await updateComment(notFoundId,updatedBody)
-    expect(updatedData).toEqual(expectedNotFoundResult)
-  })
+  it("should not update comment for invalid id", async () => {
+    const updatedData = await updateComment(notFoundId, updatedBody);
+    expect(updatedData).toEqual(expectedNotFoundResult);
+  });
 
-  it('should delete the comment',async()=>{
-    const deletedData = await deleteComment(defaultId)
-    deletedData['deletedOn'] = ISOTime
-    expect(deletedData).toEqual(expectedDeletedResult)
-  })
+  it("should delete the comment", async () => {
+    const deletedData = await deleteComment(defaultId);
+    deletedData["deletedOn"] = ISOTime;
+    expect(deletedData).toEqual(expectedDeletedResult);
+  });
 
-  it('should not delete if provided id is incorrect',async()=>{
-    const deletedData = await deleteComment(notFoundId)
-    expect(deletedData).toEqual(expectedNotFoundResult)
-  })
-})
+  it("should not delete if provided id is incorrect", async () => {
+    const deletedData = await deleteComment(notFoundId);
+    expect(deletedData).toEqual(expectedNotFoundResult);
+  });
+});
+
+describe("Mocking of custom reduce function", () => {
+  const mockReducer = jest.fn((a, b) => a + b);
+
+  beforeEach(() => (numbers = [1, 2, 3, 4, 5]));
+
+  it("should return correct result based on provided array", () => {
+    customReduce(numbers, mockReducer, 0);
+
+    expect(mockReducer.mock.calls).toHaveLength(5);
+    expect(mockReducer.mock.results[0].value).toBe(1);
+    expect(mockReducer.mock.calls[1][1]).toBe(2);
+  });
+});
+
+describe.only("Testing of CRUD operations based on Mocking", () => {
+  const d = new Date();
+  let ISOTime = d.toISOString();
+
+  const defaultId = 1;
+  const notFoundId = -1;
+
+  const newComment = {
+    body: "Learn JEST as advanced",
+    postId: 3,
+    userId: 5,
+  };
+
+  const updatedBody = {
+    body: "Be carefull with mocking",
+  };
+
+  const expectedResult = {
+    id: 341,
+    body: "Learn JEST as advanced",
+    postId: 3,
+    user: {
+      id: 5,
+      username: "kmeus4",
+    },
+  };
+
+  const expectedUpdatedResult = {
+    id: 1,
+    body: "Be carefull with mocking",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+  };
+
+  const expectedDeletedResult = {
+    id: 1,
+    body: "This is some awesome thinking!",
+    postId: 100,
+    user: {
+      id: 63,
+      username: "eburras1q",
+    },
+    isDeleted: true,
+    deletedOn: ISOTime,
+  };
+
+  const expectedNotFoundResult = {
+    message: "Comment with id '-1' not found",
+  };
+
+  const expectedInvalidBodyResult = {
+    message: "Invalid comment body",
+  };
+
+  it("should add comment(mocking)", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({ json: () => Promise.resolve(expectedResult) })
+    );
+    await addComment(newComment);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    global.fetch.mockClear();
+  });
+
+  it("should return nothing if provided object is empty(mocking)", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedInvalidBodyResult),
+      })
+    );
+    await addComment({});
+    expect(fetch).toHaveBeenCalledWith("https://dummyjson.com/comments/add", {
+      body: "{}",
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+    global.fetch.mockClear();
+  });
+
+  it("should update the comment", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedUpdatedResult),
+      })
+    );
+    await updateComment(defaultId, updatedBody);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    global.fetch.mockClear();
+  });
+
+  it("should not update comment for invalid id", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedNotFoundResult),
+      })
+    );
+    await updateComment(notFoundId, updatedBody);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    global.fetch.mockClear();
+  });
+
+  it("should delete the comment", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedDeletedResult),
+      })
+    );
+    await deleteComment(defaultId);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    global.fetch.mockClear();
+  });
+
+  it("should not delete if provided id is incorrect", async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(expectedNotFoundResult),
+      })
+    );
+    await deleteComment(notFoundId);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    global.fetch.mockClear();
+  });
+});
